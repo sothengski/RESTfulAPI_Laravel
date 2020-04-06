@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Category;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use App\Model\Category;
 
 class CategoryController extends ApiController
 {
@@ -14,7 +15,9 @@ class CategoryController extends ApiController
      */
     public function index()
     {
-        //
+        $categories = Category::all();
+
+        return $this->showAll($categories);
     }
 
     /**
@@ -35,7 +38,16 @@ class CategoryController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'name' => 'required',
+            'description' => 'required',
+        ];
+
+        $this->validate($request, $rules);
+
+        $newCategory = Category::create($request->all());
+
+        return $this->showOne($newCategory, 201);
     }
 
     /**
@@ -44,9 +56,9 @@ class CategoryController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category) //show($id)
     {
-        //
+        return $this->showOne($category);
     }
 
     /**
@@ -67,9 +79,20 @@ class CategoryController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function  update(Request $request, Category $category) //update(Request $request, $id)
     {
-        //
+        $category->fill($request->only([
+            'name',
+            'description',
+        ])); //Laravel 5.5+ use only() instead of intersect()
+
+        if ($category->isClean()) { //same as if (!$category->isDirty()) {
+            return $this->errorResponse('You need to specify any different value to update.', 422);
+        }
+
+        $category->save();
+
+        return $this->showOne($category);
     }
 
     /**
@@ -78,8 +101,10 @@ class CategoryController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category) //destroy($id)
     {
-        //
+        $category->delete();
+
+        return $this->showOne($category);
     }
 }
