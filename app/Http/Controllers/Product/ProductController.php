@@ -15,7 +15,9 @@ class ProductController extends ApiController
      */
     public function index()
     {
-        //
+        $products = Product::all();
+
+        return $this->showAll($products);
     }
 
     /**
@@ -47,7 +49,7 @@ class ProductController extends ApiController
      */
     public function show(Product $product)
     {
-        //
+        return $this->showOne($product);
     }
 
     /**

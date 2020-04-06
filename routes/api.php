@@ -27,7 +27,7 @@ Route::resource('categories', 'Category\CategoryController', ['except' => ['crea
 /**
  * Products
  */
-Route::resource('product', 'Product\ProductController', ['only' => ['index', 'show']]);
+Route::resource('products', 'Product\ProductController', ['only' => ['index', 'show']]);
 /**
  * Sellers
  */
