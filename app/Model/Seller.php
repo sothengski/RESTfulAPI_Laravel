@@ -3,7 +3,7 @@
 namespace App\Model;
 
 use App\Scopes\SellerScope;
-use App\User;
+use App\Model\User;
 use App\Transformers\SellerTransformer;
 
 

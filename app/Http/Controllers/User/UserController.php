@@ -5,7 +5,7 @@ namespace App\Http\Controllers\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use App\Mail\UserCreated;
-use App\User;
+use App\Model\User;
 use Illuminate\Support\Facades\Mail;
 
 class UserController extends ApiController

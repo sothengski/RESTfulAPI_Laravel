@@ -3,7 +3,7 @@
 namespace App\Model;
 
 use App\Scopes\BuyerScope;
-use App\User;
+use App\Model\User;
 use App\Transformers\BuyerTransformer;
 
 // use Illuminate\Database\Eloquent\Model;

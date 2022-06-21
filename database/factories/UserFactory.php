@@ -2,14 +2,17 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+namespace Database\Factories;
+
 use App\Model\Category;
 use App\Model\Product;
 use App\Model\Seller;
 use App\Model\Transaction;
-use App\User;
+use App\Model\User;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
-
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Crypt;
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -21,49 +24,84 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(User::class, function (Faker $faker) {
-    static $password;
+// $factory->define(User::class, function (Faker $faker) {
+//     static $password;
 
-    return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password' => $password ?: $password = bcrypt(('password')), //'$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        'remember_token' => Str::random(10),
-        'verified' => $verified = $faker->randomElement([User::VERIFIED_USER, User::UNVERIFIED_USER]),
-        'verification_token' => $verified == User::VERIFIED_USER ? null : User::generateVerificationCode(),
-        'admin' => $verified = $faker->randomElement([User::ADMIN_USER, User::REGULAR_USER]),
-    ];
-});
+//     return [
+//         'name' => $faker->name,
+//         'email' => $faker->unique()->safeEmail,
+//         'email_verified_at' => now(),
+//         'password' => $password ?: $password = bcrypt(('password')), //'$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+//         'remember_token' => Str::random(10),
+//         'verified' => $verified = $faker->randomElement([User::VERIFIED_USER, User::UNVERIFIED_USER]),
+//         'verification_token' => $verified == User::VERIFIED_USER ? null : User::generateVerificationCode(),
+//         'admin' => $verified = $faker->randomElement([User::ADMIN_USER, User::REGULAR_USER]),
+//     ];
+// });
 
-$factory->define(Category::class, function (Faker $faker) {
+// $factory->define(Category::class, function (Faker $faker) {
 
-    return [
-        'name' => $faker->word,
-        'description' => $faker->paragraph(1),
-    ];
-});
+//     return [
+//         'name' => $faker->word,
+//         'description' => $faker->paragraph(1),
+//     ];
+// });
 
-$factory->define(Product::class, function (Faker $faker) {
+// $factory->define(Product::class, function (Faker $faker) {
 
-    return [
-        'name' => $faker->word,
-        'description' => $faker->paragraph(1),
-        'quantity' => $faker->numberBetween(1, 10),
-        'status' => $faker->randomElement([Product::AVAILABLE_PRODUCT, Product::UNAVAILABLE_PRODUCT]),
-        'image' => $faker->randomElement(['Coca-Cola.jpg', 'Dove.jpg', 'SamsungS10plus.jpg']),
-        'seller_id' => User::all()->random()->id, //User::inRandomOrder()->first()->id
-    ];
-});
+//     return [
+//         'name' => $faker->word,
+//         'description' => $faker->paragraph(1),
+//         'quantity' => $faker->numberBetween(1, 10),
+//         'status' => $faker->randomElement([Product::AVAILABLE_PRODUCT, Product::UNAVAILABLE_PRODUCT]),
+//         'image' => $faker->randomElement(['Coca-Cola.jpg', 'Dove.jpg', 'SamsungS10plus.jpg']),
+//         'seller_id' => User::all()->random()->id, //User::inRandomOrder()->first()->id
+//     ];
+// });
 
-$factory->define(Transaction::class, function (Faker $faker) {
+// $factory->define(Transaction::class, function (Faker $faker) {
 
-    $seller = Seller::has('products')->get()->random();
-    $buyer = User::all()->except($seller->id)->random();
+//     $seller = Seller::has('products')->get()->random();
+//     $buyer = User::all()->except($seller->id)->random();
 
-    return [
-        'quantity' => $faker->numberBetween(1, 3),
-        'buyer_id' => $buyer->id,
-        'product_id' => $seller->products->random()->id,
-    ];
-});
+//     return [
+//         'quantity' => $faker->numberBetween(1, 3),
+//         'buyer_id' => $buyer->id,
+//         'product_id' => $seller->products->random()->id,
+//     ];
+// });
+
+
+
+
+class UserFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = User::class;
+    // protected $model = \App\Models\User::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        static $password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; // password;
+
+        return [
+            'name' =>  $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
+            'email_verified_at' => now(),
+            'password' => $password ?: $password = bcrypt(('password')), //'$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'remember_token' => Str::random(10),
+            'verified' => $verified = $this->faker->randomElement([User::VERIFIED_USER, User::UNVERIFIED_USER]),
+            'verification_token' => $verified == User::VERIFIED_USER ? null : User::generateVerificationCode(),
+            'admin' => $verified = $this->faker->randomElement([User::ADMIN_USER, User::REGULAR_USER]),
+        ];
+    }
+}
